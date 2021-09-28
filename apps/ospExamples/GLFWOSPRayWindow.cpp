@@ -110,8 +110,8 @@ void error_callback(int error, const char *desc)
 
 GLFWOSPRayWindow *GLFWOSPRayWindow::activeWindow = nullptr;
 
-GLFWOSPRayWindow::GLFWOSPRayWindow(const vec2i &windowSize, bool denoiser)
-    : denoiserAvailable(denoiser)
+GLFWOSPRayWindow::GLFWOSPRayWindow(const vec2i &windowSize, bool denoiser, bool polyfilter)
+    : denoiserAvailable(denoiser), polyfilterAvailable(polyfilter)
 {
   if (activeWindow != nullptr) {
     throw std::runtime_error("Cannot create more than one GLFWOSPRayWindow!");
@@ -516,6 +516,10 @@ void GLFWOSPRayWindow::buildUI()
     if (ImGui::Checkbox("denoiser", &denoiserEnabled))
       updateFrameOpsNextFrame = true;
   }
+  if (polyfilterAvailable) {
+    if (ImGui::Checkbox("polyfilter", &polyfilterEnabled))
+      updateFrameOpsNextFrame = true;
+  }
 
   ImGui::Separator();
 
@@ -745,6 +749,13 @@ void GLFWOSPRayWindow::refreshFrameOperations()
   if (denoiserEnabled) {
     cpp::ImageOperation d("denoiser");
     framebuffer.setParam("imageOperation", cpp::CopiedData(d));
+  } else {
+    framebuffer.removeParam("imageOperation");
+  }
+
+  if (polyfilterEnabled) {
+    cpp::ImageOperation pf("polyparallel");
+    framebuffer.setParam("imageOperation", cpp::CopiedData(pf));
   } else {
     framebuffer.removeParam("imageOperation");
   }

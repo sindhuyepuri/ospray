@@ -293,7 +293,7 @@ inline const Ref<const DataT<T, DIM>> ManagedObject::getParamDataT(
 {
   Data *data = getParam<Data *>(name);
 
-  if (data && data->is<T, DIM>())
+  if (data && data->is< T, DIM>())
     return &(data->as<T, DIM>());
 
   // if no data array is found, look for single item of same type

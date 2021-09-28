@@ -13,8 +13,10 @@ int main(int argc, const char *argv[])
 
   bool denoiser = ospLoadModule("denoiser") == OSP_NO_ERROR;
 
+  bool polyfilter = ospLoadModule("polyparallel") == OSP_NO_ERROR;
+
   auto glfwOSPRayWindow =
-      make_unique<GLFWOSPRayWindow>(vec2i(1024, 768), denoiser);
+      make_unique<GLFWOSPRayWindow>(vec2i(1024, 768), denoiser, polyfilter);
   glfwOSPRayWindow->mainLoop();
   glfwOSPRayWindow.reset();
 

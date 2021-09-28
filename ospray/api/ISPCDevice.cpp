@@ -386,14 +386,13 @@ box3f ISPCDevice::getBounds(OSPObject _obj)
 void ISPCDevice::setObjectParam(
     OSPObject object, const char *name, OSPDataType type, const void *mem)
 {
-  if (type == OSP_UNKNOWN)
+  if (type == OSP_UNKNOWN) {
     throw std::runtime_error("cannot set OSP_UNKNOWN parameter type");
-
+  }
   if (type == OSP_BYTE || type == OSP_RAW) {
     setParamOnObject(object, name, *(const byte_t *)mem);
     return;
   }
-
   setParamFcns[type](object, name, mem);
 }
 

@@ -64,7 +64,6 @@ LocalFrameBuffer::LocalFrameBuffer(const vec2i &_size,
 void LocalFrameBuffer::commit()
 {
   FrameBuffer::commit();
-
   imageOps.clear();
   if (imageOpData) {
     FrameBufferView fbv(this,

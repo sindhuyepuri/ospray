@@ -14,6 +14,7 @@
 #include <errno.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 #ifdef _WIN32
 #include <conio.h>
 #include <malloc.h>
@@ -22,6 +23,7 @@
 #include <alloca.h>
 #endif
 #include "ospray/ospray_util.h"
+
 
 // helper function to write the rendered image as PPM file
 void writePPM(
@@ -201,11 +203,16 @@ int main(int argc, const char **argv)
   ospSetFloat(renderer, "backgroundColor", 1.0f); // white, transparent
   ospCommit(renderer);
 
+  ospLoadModule("polyfilter");
+  OSPImageOperation pf = ospNewImageOperation("polyfilter");
   // create and setup framebuffer
   OSPFrameBuffer framebuffer = ospNewFrameBuffer(imgSize_x,
       imgSize_y,
       OSP_FB_SRGBA,
       OSP_FB_COLOR | /*OSP_FB_DEPTH |*/ OSP_FB_ACCUM);
+  ospSetParam(framebuffer, "imageOperation", OSP_IMAGE_OPERATION, pf);
+  ospCommit(framebuffer);
+
   ospResetAccumulation(framebuffer);
 
   printf("rendering initial frame to firstFrame.ppm...");
@@ -215,6 +222,7 @@ int main(int argc, const char **argv)
 
   // access framebuffer and write its content as PPM file
   const uint32_t *fb = (uint32_t *)ospMapFrameBuffer(framebuffer, OSP_FB_COLOR);
+
   writePPM("firstFrame.ppm", imgSize_x, imgSize_y, fb);
   ospUnmapFrameBuffer(fb, framebuffer);
 
@@ -228,6 +236,7 @@ int main(int argc, const char **argv)
 
   fb = (uint32_t *)ospMapFrameBuffer(framebuffer, OSP_FB_COLOR);
   writePPM("accumulatedFrame.ppm", imgSize_x, imgSize_y, fb);
+  
   ospUnmapFrameBuffer(fb, framebuffer);
 
   printf("done\n\n");

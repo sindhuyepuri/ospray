@@ -77,6 +77,7 @@ int main(int argc, const char **argv)
   // use scoped lifetimes of wrappers to release everything before ospShutdown()
   {
     // create and setup camera
+    //ospLoadModule("polycam");
     ospray::cpp::Camera camera("perspective");
     camera.setParam("aspect", imgSize.x / (float)imgSize.y);
     camera.setParam("position", cam_pos);
@@ -124,8 +125,12 @@ int main(int argc, const char **argv)
     renderer.commit();
 
     // create and setup framebuffer
+    ospLoadModule("polyparallel");
     ospray::cpp::FrameBuffer framebuffer(
         imgSize.x, imgSize.y, OSP_FB_SRGBA, OSP_FB_COLOR | OSP_FB_ACCUM);
+    ospray::cpp::ImageOperation pf("polyparallel");
+    framebuffer.setParam("imageOperation", ospray::cpp::CopiedData(pf));
+    framebuffer.commit();
     framebuffer.clear();
 
     // render one frame
@@ -133,7 +138,7 @@ int main(int argc, const char **argv)
 
     // access framebuffer and write its content as PPM file
     uint32_t *fb = (uint32_t *)framebuffer.map(OSP_FB_COLOR);
-    rkcommon::utility::writePPM("firstFrameCpp.ppm", imgSize.x, imgSize.y, fb);
+    rkcommon::utility::writePPM("firstFrameCpp2.ppm", imgSize.x, imgSize.y, fb);
     framebuffer.unmap(fb);
     std::cout << "rendering initial frame to firstFrameCpp.ppm" << std::endl;
 
@@ -144,7 +149,7 @@ int main(int argc, const char **argv)
 
     fb = (uint32_t *)framebuffer.map(OSP_FB_COLOR);
     rkcommon::utility::writePPM(
-        "accumulatedFrameCpp.ppm", imgSize.x, imgSize.y, fb);
+        "accumulatedFrameCpp2.ppm", imgSize.x, imgSize.y, fb);
     framebuffer.unmap(fb);
     std::cout << "rendering 10 accumulated frames to accumulatedFrameCpp.ppm"
               << std::endl;

@@ -27,7 +27,7 @@ enum class OSPRayRendererType
 class GLFWOSPRayWindow
 {
  public:
-  GLFWOSPRayWindow(const vec2i &windowSize, bool denoiser = false);
+  GLFWOSPRayWindow(const vec2i &windowSize, bool denoiser = false, bool polyfilter = false);
 
   ~GLFWOSPRayWindow();
 
@@ -57,8 +57,10 @@ class GLFWOSPRayWindow
   vec2f previousMouse{-1.f};
 
   bool denoiserAvailable{false};
+  bool polyfilterAvailable{false};
   bool updateFrameOpsNextFrame{false};
   bool denoiserEnabled{false};
+  bool polyfilterEnabled{false};
   bool showAlbedo{false};
   bool showDepth{false};
   bool renderSunSky{false};

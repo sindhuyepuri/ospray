@@ -113,8 +113,9 @@ inline Data *ManagedObject::getParam<Data *>(
 {
   auto *obj = ParameterizedObject::getParam<ManagedObject *>(
       name, (ManagedObject *)valIfNotFound);
-  if (obj && obj->managedObjectType == OSP_DATA)
+  if (obj && obj->managedObjectType == OSP_DATA) {
     return (Data *)obj;
+  }
   else {
     // reset query status if object is not a Data*
     if (obj)
