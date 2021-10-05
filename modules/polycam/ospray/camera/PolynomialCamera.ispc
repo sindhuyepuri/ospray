@@ -25,12 +25,72 @@ void PolynomialCamera_initRay(const Camera *uniform _self,
 //     TODO: PolyTerm (scalar factor, power of each term)
 // TODO: Transform4f (Poly4f equations, trunc_deg)
 // TODO: get_system
-//      TODO: two_plane_5
+//      TODO: two_plane_5x
 //          TODO: make_TPT4f
 //          TODO: refract_spherical_5
 //          TODO: propagate_5
 // TODO: Optical Material
 
+PT4fData* initPoly4(float coeff, uint32_t e0, uint32_t e1, uint32_t e2, uint32_t e3, uint32_t e4) {
+    PT4fData newData;
+    newData.coeff = coeff;
+    newData.e0 = e0;
+    newData.e1 = e1;
+    newData.e2 = e2;
+    newData.e3 = e3;
+    newData.e4 = e4;
+}
+
+void propagate_5(PT4fData **polynomials, int *num_terms, float l) {
+    
+    num_terms[0] = 7;
+
+    polynomials[0][0] = initPoly4(1, 
+        1, 0, 0, 0);
+    polynomials[0][1] = initPoly4(l, 
+        0, 0, 1, 0);
+    polynomials[0][2] = initPoly4(l/2.f, 
+        0, 0, 3, 0);
+    polynomials[0][3] = initPoly4(l/2.f, 
+        0, 0, 1, 1);
+    polynomials[0][4] = initPoly4(3*l/8.f,
+        0, 0, 1, 4);
+    polynomials[0][5] = initPoly4(3*l/4.f,
+        0, 0, 3, 2);
+    polynomials[0][6] = initPoly4(3*l/8.f,
+        0, 0, 5, 0);
+
+    num_terms[1] = 7;
+
+    polynomials[1][0] = initPoly4(1, 
+        0, 1, 0, 0);
+    polynomials[1][1] = initPoly4(l, 
+        0, 0, 0, 1);
+    polynomials[1][2] = initPoly4(l/2.f,
+        0, 0, 0, 3);
+    polynomials[1][3] = initPoly4(l/2.f,
+        0, 0, 2, 1);
+    polynomials[1][4] = initPoly4(3*l/8.f,
+        0, 0, 4, 1);
+    polynomials[1][5] = initPoly4(3*l/4.f,
+        0, 0, 2, 3);
+    polynomials[1][6] = initPoly4(3*l/8.f,
+        0, 0, 0, 5);
+
+    num_terms[2] = 1;
+
+    polynomials[2][0] = initPoly4(1,
+        0, 0, 1, 0);
+
+    num_terms[3] = 1;
+
+    polynomials[3][9] = initPoly4(1,
+        0, 0, 0, 1);
+}
+
+Transform4f refract_spherical_5(float R, float n1, float n2, int trunc = 5) {
+    
+}
 
 /*! create a new ispc-side version of a orthographiccamera - with given
     pointer to the c-class version - and return both class pointer and

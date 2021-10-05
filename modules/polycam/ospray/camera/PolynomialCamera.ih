@@ -28,5 +28,13 @@ struct PT4fData {
   uint32_t e1;
   uint32_t e2;
   uint32_t e3;
-};
+  uint32_t e4;
+}; 
 
+struct Transform4f {
+  PT4fData polynomial1[4];
+  PT4fData polynomial2[4];
+  PT4fData polynomial3[4];
+  PT4fData polynomial4[4];
+  int trunc_degree;
+};

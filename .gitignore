@@ -27,6 +27,9 @@ readme.pdf
 !/modules/simdGeometryExample
 !/modules/denoiser
 !/modules/mpi
+!/modules/polycam
+!/modules/polyfilter
+!/modules/polyparallel
 *.vim
 .idea/
 premake.local.*
