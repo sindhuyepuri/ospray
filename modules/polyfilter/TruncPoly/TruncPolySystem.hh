@@ -351,7 +351,7 @@ public:
     equations[0] = rhs;
     trunc_degree = rhs.trunc_degree;
 
-    return *this;
+    return *this;f
   }
 
   // Assign TruncPolySystem to TruncPolySystem

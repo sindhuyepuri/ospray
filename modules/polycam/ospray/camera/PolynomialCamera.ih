@@ -24,11 +24,10 @@ struct PolynomialCamera
 
 struct PT4fData {
   float coeff;
-  uint32_t e0;
-  uint32_t e1;
-  uint32_t e2;
-  uint32_t e3;
-  uint32_t e4;
+  int8 e0;
+  int8 e1;
+  int8 e2;
+  int8 e3;
 }; 
 
 struct Transform4f {
@@ -36,5 +35,5 @@ struct Transform4f {
   PT4fData polynomial2[4];
   PT4fData polynomial3[4];
   PT4fData polynomial4[4];
-  int trunc_degree;
+  int trunc_degree;               
 };
